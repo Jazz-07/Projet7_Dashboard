@@ -6,6 +6,7 @@ import pandas as pd
 import streamlit as st
 import requests
 import json
+from streamlit_shap import st_shap
 import shap
 from joblib import load
 from sklearn.ensemble import HistGradientBoostingClassifier
@@ -71,14 +72,12 @@ if number in test1:
         model = load('modele_joblib')
         classifier=model['HGBClassifier']
         user=pd.DataFrame([valeurs])
-        st.write(user)
+        #st.write(user)
         x_transfo= model['RobustScaler'].fit_transform(user)
         explainer = shap.TreeExplainer(classifier)
         shap_values = explainer.shap_values(x_transfo)
         features=['EXT_SOURCE_3', 'EXT_SOURCE_1', 'EXT_SOURCE_2', 'PAYMENT_RATE']
-        #st.pyplot(shap.force_plot(explainer.expected_value[0],shap_values[0],matplotlib=True))
-        st.set_option('deprecation.showPyplotGlobalUse', False)
-        st.pyplot(shap.summary_plot(shap_values,x_transfo,plot_type='bar',feature_names=features,max_display=len(features)))
-        #shap.force_plot(explainer.expected_value, shap_values[0,:], df_client[feat].iloc[0,:])
-        #st.pyplot()
+        #st.set_option('deprecation.showPyplotGlobalUse', False)
+        st_shap(shap.summary_plot(shap_values,x_transfo,plot_type='bar',feature_names=features,max_display=len(features)))
+        
         
