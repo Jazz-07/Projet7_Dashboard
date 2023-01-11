@@ -68,7 +68,7 @@ if number in test1:
         st.subheader(f"The prediction from model and probability : {response.text}")
     
     if st.button('Interprétabilité des résultats'):
-        shap.initjs()
+        #shap.initjs()
         model = load('modele_joblib')
         classifier=model['HGBClassifier']
         user=pd.DataFrame([valeurs])
