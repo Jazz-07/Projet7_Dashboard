@@ -7,5 +7,6 @@ seaborn==0.12.1
 fastapi==0.88.0
 pydantic==1.10.4
 streamlit==1.11.0
+json==2.0.9
 shap==0.41.0
 streamlit-shap==1.0.2
