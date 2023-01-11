@@ -9,5 +9,5 @@ pydantic==1.10.4
 streamlit==1.11.0
 json==2.0.9
 shap
-streamlit_shap
-st_shap
+streamlit_shap==1.0.2
+
