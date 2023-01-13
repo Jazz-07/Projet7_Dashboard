@@ -6,20 +6,19 @@ import pandas as pd
 import streamlit as st
 import requests
 import json
-from streamlit_shap import st_shap
 import shap
 from joblib import load
 from sklearn.ensemble import HistGradientBoostingClassifier
 from sklearn.preprocessing import RobustScaler
 from sklearn.pipeline import Pipeline
-
+from streamlit_shap import st_shap
 import re
 
 st.title('Realiser un Dashboard')
 # Données sur les caracterisques d'un client
-st.subheader('Echantillon des données ')
-df_client=pd.read_csv('df_data')
-st.write(df_client.head())
+#st.subheader('Echantillon des données ')
+df_client=pd.read_csv('df_projet')
+#st.write(df_client.head())
 
 from sklearn.preprocessing import RobustScaler
 from sklearn.pipeline import Pipeline
@@ -46,7 +45,10 @@ if number in test1:
     EXT_SOURCE_1=df_client['EXT_SOURCE_1'].loc[df_client['SK_ID_CURR']==number].values
     EXT_SOURCE_2=df_client['EXT_SOURCE_2'].loc[df_client['SK_ID_CURR']==number].values
     EXT_SOURCE_3=df_client['EXT_SOURCE_3'].loc[df_client['SK_ID_CURR']==number].values
+    AMT_GOODS_PRICE=df_client['AMT_GOODS_PRICE'].loc[df_client['SK_ID_CURR']==number].values
+    INSTAL_AMT_PAYMENT_MIN=df_client['INSTAL_AMT_PAYMENT_MIN'].loc[df_client['SK_ID_CURR']==number].values
     PAYMENT_RATE=df_client['PAYMENT_RATE'].loc[df_client['SK_ID_CURR']==number].values
+    DAYS_EMPLOYED=df_client['DAYS_EMPLOYED'].loc[df_client['SK_ID_CURR']==number].values
     
 
     vector = np.vectorize(np.float64)
@@ -54,10 +56,13 @@ if number in test1:
     EXT_SOURCE_1=float(vector( EXT_SOURCE_1))
     EXT_SOURCE_2=float(vector( EXT_SOURCE_2))
     EXT_SOURCE_3=float(vector( EXT_SOURCE_3))
+    AMT_GOODS_PRICE=float(vector( AMT_GOODS_PRICE))
+    INSTAL_AMT_PAYMENT_MIN=float(vector( INSTAL_AMT_PAYMENT_MIN))
     PAYMENT_RATE=float(vector( PAYMENT_RATE))
+    DAYS_EMPLOYED=float(vector( DAYS_EMPLOYED))
     
 
-    valeurs={"EXT_SOURCE_1": EXT_SOURCE_1,"EXT_SOURCE_2": EXT_SOURCE_2,"EXT_SOURCE_3": EXT_SOURCE_3,"PAYMENT_RATE": PAYMENT_RATE}
+    valeurs={"EXT_SOURCE_1": EXT_SOURCE_1,"EXT_SOURCE_2": EXT_SOURCE_2,"EXT_SOURCE_3": EXT_SOURCE_3,"AMT_GOODS_PRICE":AMT_GOODS_PRICE,"INSTAL_AMT_PAYMENT_MIN":INSTAL_AMT_PAYMENT_MIN,"PAYMENT_RATE": PAYMENT_RATE,"DAYS_EMPLOYED":DAYS_EMPLOYED}
     val=json.dumps(valeurs)
     
 
@@ -69,15 +74,15 @@ if number in test1:
     
     if st.button('Interprétabilité des résultats'):
         #shap.initjs()
-        model = load('modele_joblib')
+        model = load('modele_projet7')
         classifier=model['HGBClassifier']
         user=pd.DataFrame([valeurs])
         #st.write(user)
         x_transfo= model['RobustScaler'].fit_transform(user)
         explainer = shap.TreeExplainer(classifier)
         shap_values = explainer.shap_values(x_transfo)
-        features=['EXT_SOURCE_3', 'EXT_SOURCE_1', 'EXT_SOURCE_2', 'PAYMENT_RATE']
-        #st.set_option('deprecation.showPyplotGlobalUse', False)
+        
+        features=["EXT_SOURCE_2","EXT_SOURCE_3","EXT_SOURCE_1","AMT_GOODS_PRICE","INSTAL_AMT_PAYMENT_MIN","PAYMENT_RATE","DAYS_EMPLOYED"]
         st_shap(shap.summary_plot(shap_values,x_transfo,plot_type='bar',feature_names=features,max_display=len(features)))
         
         

@@ -1,4 +1,5 @@
 
+
 from joblib import load
 from typing import Optional
 from fastapi import FastAPI
@@ -10,8 +11,8 @@ from sklearn.ensemble import HistGradientBoostingClassifier
 from sklearn.preprocessing import RobustScaler
 from sklearn.pipeline import Pipeline
 
-data = pd.read_csv('df_data')
-loaded_model = load('modele_joblib')
+data = pd.read_csv('df_projet')
+loaded_model = load('modele_projet7')
 
 # creation d'une nouvelle instance fastAPI
 app = FastAPI()
@@ -22,7 +23,11 @@ class request_body(BaseModel):
     EXT_SOURCE_1 : float
     EXT_SOURCE_2 : float
     EXT_SOURCE_3 : float
+    AMT_GOODS_PRICE : float
+    INSTAL_AMT_PAYMENT_MIN : float
     PAYMENT_RATE : float
+    DAYS_EMPLOYED : float
+    
     
 
 # Définition du chemin de point de terminaison 
@@ -36,7 +41,10 @@ def predict (req : request_body) :
         data['EXT_SOURCE_1'],
         data['EXT_SOURCE_2'],
         data['EXT_SOURCE_3'],
-        data['PAYMENT_RATE']
+        data['AMT_GOODS_PRICE'],
+        data['INSTAL_AMT_PAYMENT_MIN'],
+        data['PAYMENT_RATE'],
+        data['DAYS_EMPLOYED']
         ]]
     
     # prédiction 
@@ -49,6 +57,6 @@ def predict (req : request_body) :
         'probability': probability
     }
 
-print(data)
+#print(data)
 
 
