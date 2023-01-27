@@ -76,7 +76,7 @@ if number in test1:
     st.write(val_df)
     st.subheader('INFORMATIONS DESCRIPTIVES DES CLIENTS')
     st.write(df_client[features].describe())
-    if st.button("Predict"):
+    if st.button("DECISION"):
         response = requests.post(url =' https://test-projet7-2022.herokuapp.com/predict',data=val)
         #prediction =response.text
         #st.subheader(f"The prediction from model and probability : {response.text}")
@@ -119,7 +119,8 @@ if number in test1:
         clé_2=result['x_transfo']
         shap_values=np.array(clé_1)
         x_transfo=np.array(clé_2)
-        plt.style.use('Solarize_Light2')
+        plt.style.use('classic')
+        plt.title('INTERPRETABILITE ')
         features=["EXT_SOURCE_2","EXT_SOURCE_3","EXT_SOURCE_1","DAYS_EMPLOYED_PERC","AMT_ANNUITY","PREV_CNT_PAYMENT_MEAN","ACTIVE_DAYS_CREDIT_MAX"]
         st_shap(shap.summary_plot(shap_values,x_transfo,plot_type='bar',feature_names=features,max_display=len(features)))
         #st.write(shap_values)
